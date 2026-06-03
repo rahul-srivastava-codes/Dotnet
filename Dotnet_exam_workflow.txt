@@ -1,0 +1,72 @@
+1)use existing database
+
+2) create table of your choice
+
+3) install dependencies such as MS.EntityFrameworkCore and etc
+
+4) Scaffold-dbcontext "Connection string" MS.EntityFrameworkCore.SqlServer
+
+then build project immediately
+
+5) Create a controller with API in it and  select API controller with actions, using entity framework
+
+6) Date format YY-MM-DD
+
+7) Create a student class
+
+8) Write custom validation in student class
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace Sirlec.Models;
+
+public partial class Employee
+{
+    public int Id { get; set; }
+    [Required]
+    [Name(ErrorMessage="Name is required")]
+    public string Name { get; set; } = null!;
+
+    [Required]
+    [AgeChecker(ErrorMessage = "Date of Birth is required and must be a valid date")]
+    public int Age { get; set; }
+
+    public decimal Salary { get; set; }
+}
+
+// write a agechecker class that checks if the employee is above 18 years old and returns a message accordingly.
+
+public class AgeChecker: ValidationAttribute
+{
+    public override bool IsValid(object? value)
+    {
+        DateOnly dob = (DateOnly)value;
+        //int age = DateTime.Now.Year - dob.Year;
+        //return age >= 18;
+
+        if(DateTime.Now.Year - dob.Year >= 18)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public string CheckAge(Employee employee)
+    {
+        if (employee.Age >= 18)
+        {
+            return $"Employee {employee.Name} is above 18 years old.";
+        }
+        else
+        {
+            return $"Employee {employee.Name} is below 18 years old.";
+        }
+    }
+}
+
+// Note code is different 
+// sir opted for Student class
